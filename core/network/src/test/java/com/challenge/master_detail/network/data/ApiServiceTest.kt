@@ -1,6 +1,6 @@
 package com.challenge.master_detail.network.data
 
-import com.challenge.master_detail.network.api.ColorApiService
+import com.challenge.master_detail.network.api.ApiService
 import com.challenge.master_detail.network.di.NetworkModule
 import com.squareup.moshi.JsonEncodingException
 import junit.framework.TestCase.assertEquals
@@ -9,7 +9,6 @@ import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -17,11 +16,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertFailsWith
 
-class ColorApiServiceTest {
+class ApiServiceTest {
 
     private val mockWebServer = MockWebServer()
     private lateinit var client: OkHttpClient
-    private lateinit var api: ColorApiService
+    private lateinit var api: ApiService
 
     private val moshi = NetworkModule.parser()
 
@@ -44,7 +43,7 @@ class ColorApiServiceTest {
                 )
             )
             .build()
-            .create(ColorApiService::class.java)
+            .create(ApiService::class.java)
     }
 
     @After
@@ -53,35 +52,20 @@ class ColorApiServiceTest {
     }
 
     @Test
-    fun `should fetch color description success response`() = runBlocking {
+    fun `should fetch list success response`() = runBlocking {
         // given
-        val configurationResponseModel = ApiMock.colorNetwork
+        val configurationResponseModel = ApiMock.listNetwork
         val asset = JvmUnitTestFakeAssetManager
         val mockResponse = MockResponse()
             .setResponseCode(200)
-            .setBody(asset.readFileWithNewLineFromResources("get_color_description.json"))
+            .setBody(asset.readFileWithNewLineFromResources("list.json"))
 
         // when
         mockWebServer.enqueue(mockResponse)
-        val response = api.getColorDescription("24B1E0")
+        val response = api.getList("")
 
         // then
         assertEquals(configurationResponseModel, response)
     }
 
-    @Test
-    fun `should throw a JsonEncodingException when fetching an SVG file o another format different than JSON`() : Unit = runBlocking {
-        // given
-        val asset = JvmUnitTestFakeAssetManager
-        val mockResponse = MockResponse()
-            .setResponseCode(200)
-            .setBody(asset.readFileWithNewLineFromResources("get_color_format_svg.svg"))
-
-        // when
-        mockWebServer.enqueue(mockResponse)
-        // assert
-        assertFailsWith<JsonEncodingException> {
-            api.getColorDescription("#FFAAFF")
-        }
-    }
 }

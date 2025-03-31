@@ -10,11 +10,11 @@ import androidx.navigation.navArgument
 sealed class NavigationItem(val baseRoute: String) {
     open val route: String = baseRoute
 
-    object CAMERA : NavigationItem(ScreenEnum.CAMERA.name)
     object LIST : NavigationItem(ScreenEnum.LIST.name)
+    object DETAIL : NavigationItem(ScreenEnum.DETAIL.name)
 }
 
 enum class ScreenEnum() {
-    CAMERA,
+    DETAIL,
     LIST,
 }

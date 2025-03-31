@@ -1,8 +1,7 @@
 package com.challenge.master_detail.network.data
 
 import com.challenge.master_detail.network.BuildConfig
-import com.challenge.master_detail.network.api.ColorApiService
-import com.challenge.master_detail.network.data.model.ColorResponse
+import com.challenge.master_detail.network.api.ApiService
 import com.squareup.moshi.Moshi
 import okhttp3.Call
 import retrofit2.Retrofit
@@ -26,7 +25,6 @@ class RetrofitNetwork @Inject constructor(
         )
         .build()
 
-    private val colorApi = networkApi.create(ColorApiService::class.java)
+    private val colorApi = networkApi.create(ApiService::class.java)
 
-    override suspend fun fetchColorInfo(hex: String): ColorResponse = colorApi.getColorDescription(hex = hex)
 }

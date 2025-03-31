@@ -6,25 +6,7 @@ import com.squareup.moshi.JsonClass
 
 
 @JsonClass(generateAdapter = true)
-data class ColorResponse (
-    val hex: Hex,
-    val contrast: Contrast,
-    val name: Name,
+data class Response (
+    val name: String,
 ) : NetworkResponseBase()
 
-data class Contrast (
-    val value: String
-)
-
-data class Hex (
-    val value: String,
-    val clean: String
-)
-data class Name (
-    val value: String,
-    @Json(name = "closest_named_hex")
-    val closestNamedHex: String,
-    @Json(name = "exact_match_name")
-    val exactMatchName: Boolean,
-    val distance: Long
-)
