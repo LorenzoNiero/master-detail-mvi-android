@@ -21,4 +21,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "MasterDetail"
 include(":app")
+include(":core:common")
+include(":core:ui")
+include(":core:network")
+include(":core:domain")
+include("core:data")
+//include(":feature:NAME")
+//include(":feature:NAME")
  
