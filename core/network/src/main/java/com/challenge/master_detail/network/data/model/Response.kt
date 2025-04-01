@@ -1,7 +1,6 @@
 package com.challenge.master_detail.network.data.model
 
 import com.challenge.master_detail.network.data.model.base.NetworkResponseBase
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 

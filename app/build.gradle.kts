@@ -30,7 +30,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            //todo: signed with a keystore
+            //TODO: signed with a keystore
         }
     }
 
@@ -51,7 +51,11 @@ android {
 
 dependencies {
 
+    implementation(project(":core:ui"))
     implementation(project(":core:common"))
+    implementation(project(":core:navigator"))
+    implementation(project(":feature:list"))
+    implementation(project(":feature:detail"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -61,8 +65,11 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.hilt.android)
+    implementation(libs.navigation.compose)
+    implementation(libs.androidx.navigation.runtime.ktx)
     kapt(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)

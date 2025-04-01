@@ -1,7 +1,7 @@
 package com.challenge.master_detail.domain.di
 
-import com.challenge.master_detail.domain.repository.ColorRepository
-import com.challenge.master_detail.domain.repository.ColorRepositoryImpl
+import com.challenge.master_detail.domain.repository.Repository
+import com.challenge.master_detail.domain.repository.RepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +13,6 @@ import javax.inject.Singleton
 internal class DomainModule {
     @Provides
     @Singleton
-    fun provideHomeRepository(repository: ColorRepositoryImpl): ColorRepository = repository
+    fun provideRepository(repository: RepositoryImpl): Repository = repository
 
 }
