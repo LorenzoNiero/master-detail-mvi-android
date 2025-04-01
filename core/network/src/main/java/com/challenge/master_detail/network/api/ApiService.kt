@@ -1,14 +1,16 @@
 package com.challenge.master_detail.network.api
 
+import com.challenge.master_detail.network.data.model.MediaResponse
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 /**
  * Implementation of endpoint
- * @see <a href="https://www.thecolorapi.com/docs#colors-color-identification-get">Documentation</a>
+ * @see <a href="https://apivegans.veganslab.xyz/test.json">Endpoint test</a>
  *
  */
 interface ApiService {
 
+    @GET("/test.json")
+    suspend fun getMediaList() : MediaResponse
 
 }

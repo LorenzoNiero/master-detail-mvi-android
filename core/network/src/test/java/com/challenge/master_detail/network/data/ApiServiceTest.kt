@@ -2,9 +2,11 @@ package com.challenge.master_detail.network.data
 
 import com.challenge.master_detail.network.api.ApiService
 import com.challenge.master_detail.network.di.NetworkModule
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.squareup.moshi.JsonEncodingException
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -12,9 +14,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
-import kotlin.test.assertFailsWith
 
 class ApiServiceTest {
 
@@ -22,7 +22,7 @@ class ApiServiceTest {
     private lateinit var client: OkHttpClient
     private lateinit var api: ApiService
 
-    private val moshi = NetworkModule.parser()
+    private val json = NetworkModule.provideJson()
 
     @Before
     fun setup() {
@@ -37,11 +37,7 @@ class ApiServiceTest {
         api = Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
             .client(client)
-            .addConverterFactory(
-                MoshiConverterFactory.create(
-                    moshi
-                )
-            )
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(ApiService::class.java)
     }
@@ -62,7 +58,7 @@ class ApiServiceTest {
 
         // when
         mockWebServer.enqueue(mockResponse)
-        val response = api.getList("")
+        val response = api.getMediaList()
 
         // then
         assertEquals(configurationResponseModel, response)
