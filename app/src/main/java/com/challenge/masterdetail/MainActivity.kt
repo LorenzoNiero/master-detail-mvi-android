@@ -17,12 +17,23 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,6 +44,7 @@ import com.challenge.master_detail.navigator.NavigatorEvent
 import com.challenge.master_detail.navigator.destination.ListNavigationDestination
 import com.challenge.master_detail.navigator.destination.NavigationDestination
 import com.challenge.master_detail.navigator.destination.toNavigationDestination
+import com.challenge.master_detail.ui.component.TopBar
 import com.challenge.master_detail.ui.theme.MasterDetailTheme
 import com.challenge.masterdetail.navigations.getNavigationDestinationScreenMap
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,6 +77,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun MainContent(
         modifier: Modifier = Modifier,
@@ -74,7 +87,14 @@ class MainActivity : ComponentActivity() {
     ) {
         Scaffold(
             modifier = modifier,
-            topBar = { },
+            topBar = {
+                TopBar(
+                    title = stringResource(currentDestination?.titleResId() ?: R.string.app_name),
+                    onBackClick = currentDestination?.isBackVisible?.takeIf { it }?.let {
+                        { -> navigator.navigateUp() }
+                    }
+                )
+            },
         ) { paddingValues ->
             Column(
                 Modifier
@@ -111,6 +131,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
 
     @Composable
     private fun ManageNavController(navController: NavHostController) {

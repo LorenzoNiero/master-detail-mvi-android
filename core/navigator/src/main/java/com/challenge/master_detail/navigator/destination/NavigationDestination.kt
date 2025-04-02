@@ -4,9 +4,13 @@ import androidx.navigation.NamedNavArgument
 
 interface NavigationDestination {
     fun route(): String
+    fun titleResId(): Int
 
     val arguments: List<NamedNavArgument>
         get() = emptyList()
+
+    val isBackVisible: Boolean
+        get() = true
 }
 
 fun String.toNavigationDestination(): NavigationDestination =
