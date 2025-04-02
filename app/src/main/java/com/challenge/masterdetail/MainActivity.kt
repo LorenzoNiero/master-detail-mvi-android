@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -28,11 +31,11 @@ import androidx.navigation.compose.rememberNavController
 import com.challenge.master_detail.navigator.Navigator
 import com.challenge.master_detail.navigator.NavigatorEvent
 import com.challenge.master_detail.navigator.destination.ListNavigationDestination
+import com.challenge.master_detail.navigator.destination.NavigationDestination
+import com.challenge.master_detail.navigator.destination.toNavigationDestination
 import com.challenge.master_detail.ui.theme.MasterDetailTheme
 import com.challenge.masterdetail.navigations.getNavigationDestinationScreenMap
 import dagger.hilt.android.AndroidEntryPoint
-import com.challenge.master_detail.navigator.destination.NavigationDestination
-import com.challenge.master_detail.navigator.destination.toNavigationDestination
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
@@ -93,7 +96,16 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, startDestination = startDestination.route()) {
                     composableDestinations.forEach { entry ->
                         val destination = entry.key
-                        composable(destination.route(), destination.arguments) {
+                        composable(
+                            route = destination.route(),
+                            arguments = destination.arguments,
+                            enterTransition = {
+                                slideInHorizontally { it } + fadeIn()
+                            },
+                            exitTransition = {
+                                slideOutHorizontally { -it } + fadeOut()
+                            }
+                        ) {
                             entry.value()
                         }
                     }

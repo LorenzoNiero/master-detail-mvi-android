@@ -1,6 +1,7 @@
 package com.challenge.master_detail.navigator
 
 import androidx.navigation.NavOptionsBuilder
+import com.challenge.master_detail.navigator.destination.NavigationDestination
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface Navigator {
 
     fun navigateUp(): Boolean
-    fun navigate(route: String, builder: NavOptionsBuilder.() -> Unit = { launchSingleTop = true }): Boolean
+    fun navigate(navigationDestination: NavigationDestination, builder: NavOptionsBuilder.() -> Unit = { launchSingleTop = true }): Boolean
 
     val destinations: Flow<NavigatorEvent>
 }

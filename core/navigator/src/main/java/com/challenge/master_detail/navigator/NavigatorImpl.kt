@@ -1,6 +1,7 @@
 package com.challenge.master_detail.navigator
 
 import androidx.navigation.NavOptionsBuilder
+import com.challenge.master_detail.navigator.destination.NavigationDestination
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
@@ -14,6 +15,6 @@ internal class NavigatorImpl @Inject constructor() : Navigator {
 
 
     override fun navigateUp(): Boolean = navigationEvents.trySend(NavigatorEvent.NavigateUp).isSuccess
-    override fun navigate(route: String, builder: NavOptionsBuilder.() -> Unit): Boolean = navigationEvents.trySend(NavigatorEvent.Directions(route, builder)).isSuccess
+    override fun navigate(navigationDestination: NavigationDestination, builder: NavOptionsBuilder.() -> Unit): Boolean = navigationEvents.trySend(NavigatorEvent.Directions(navigationDestination.route(), builder)).isSuccess
 
 }
