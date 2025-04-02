@@ -19,5 +19,7 @@ internal fun MediaContent.toDomainModel() : MediaModel = MediaModel(
 )
 
 private fun MediaType.toDomainModel(): MediaModelType {
-    return MediaModelType.valueOf(this.value)
+    return when(this){
+        MediaType.PDF -> MediaModelType.PDF
+    }
 }
