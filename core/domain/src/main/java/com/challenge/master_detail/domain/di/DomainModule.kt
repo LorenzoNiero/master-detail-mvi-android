@@ -1,7 +1,7 @@
 package com.challenge.master_detail.domain.di
 
-import com.challenge.master_detail.domain.repository.Repository
-import com.challenge.master_detail.domain.repository.RepositoryImpl
+import com.challenge.master_detail.domain.repository.MediaRepository
+import com.challenge.master_detail.domain.repository.MediaRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +13,5 @@ import javax.inject.Singleton
 internal class DomainModule {
     @Provides
     @Singleton
-    fun provideRepository(repository: RepositoryImpl): Repository = repository
-
+    fun provideRepository(repository: MediaRepositoryImpl): MediaRepository = repository
 }

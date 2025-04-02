@@ -41,7 +41,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     @Inject
     lateinit var navigator: Navigator
 
@@ -50,7 +49,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MasterDetailTheme {
-                Surface (modifier = Modifier.fillMaxSize()) {
+                Surface(modifier = Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
 
                     val currentDestinationState by navController.currentBackStackEntryAsState()
@@ -59,9 +58,8 @@ class MainActivity : ComponentActivity() {
                     MainContent(
                         navController = navController,
                         currentDestination = currentNavigationDestination,
-                        startDestination = ListNavigationDestination
+                        startDestination = ListNavigationDestination,
                     )
-
                 }
             }
         }
@@ -72,11 +70,11 @@ class MainActivity : ComponentActivity() {
         modifier: Modifier = Modifier,
         navController: NavHostController,
         currentDestination: NavigationDestination?,
-        startDestination: NavigationDestination
+        startDestination: NavigationDestination,
     ) {
         Scaffold(
             modifier = modifier,
-            topBar = { }
+            topBar = { },
         ) { paddingValues ->
             Column(
                 Modifier
@@ -85,9 +83,9 @@ class MainActivity : ComponentActivity() {
                     .consumeWindowInsets(paddingValues)
                     .windowInsetsPadding(
                         WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal
-                        )
-                    )
+                            WindowInsetsSides.Horizontal,
+                        ),
+                    ),
             ) {
                 ManageNavController(navController)
 
@@ -104,14 +102,13 @@ class MainActivity : ComponentActivity() {
                             },
                             exitTransition = {
                                 slideOutHorizontally { -it } + fadeOut()
-                            }
+                            },
                         ) {
                             entry.value()
                         }
                     }
                 }
             }
-
         }
     }
 
@@ -126,7 +123,7 @@ class MainActivity : ComponentActivity() {
                     is NavigatorEvent.Directions -> {
                         navController.navigate(
                             event.destinationRoute,
-                            event.builder
+                            event.builder,
                         )
                     }
                 }
@@ -134,6 +131,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-

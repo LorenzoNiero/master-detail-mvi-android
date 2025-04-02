@@ -28,9 +28,9 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
-            //TODO: signed with a keystore
+            // TODO: signed with a keystore
         }
     }
 

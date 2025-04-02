@@ -15,7 +15,6 @@ android {
             dimension = "environment"
         }
     }
-
 }
 
 dependencies {

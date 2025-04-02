@@ -1,7 +1,3 @@
 package com.challenge.data
 
-class RemoteDataSourceTest {
-
-
-}
-
+class RemoteDataSourceTest

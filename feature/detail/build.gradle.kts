@@ -43,6 +43,6 @@ dependencies {
     implementation(libs.hilt.compose)
 
     testImplementation(libs.junit)
-    testImplementation (libs.mockk)
+    testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
 }

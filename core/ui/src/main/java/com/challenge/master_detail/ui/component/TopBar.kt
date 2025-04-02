@@ -22,25 +22,25 @@ fun TopBar(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onSecondary
-        ),
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onSecondary,
+            ),
         navigationIcon = {
             onBackClick?.let {
                 IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back"
+                        contentDescription = "Back",
                     )
                 }
             }
-
         },
         title = { Text(title) },
-        actions = actions
+        actions = actions,
     )
 }
 
@@ -49,7 +49,6 @@ fun TopBar(
 fun TopBar_Previews() {
     MasterDetailTheme {
         TopBar(title = "Title bar", onBackClick = {
-
         })
     }
 }

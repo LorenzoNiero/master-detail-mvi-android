@@ -9,8 +9,6 @@ import retrofit2.http.GET
  *
  */
 interface ApiService {
-
     @GET("/test.json")
-    suspend fun getMediaList() : MediaResponse
-
+    suspend fun getMediaList(): MediaResponse
 }

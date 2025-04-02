@@ -8,5 +8,5 @@ import com.challenge.master_detail.navigator.destination.NavigationDestination
 @Composable
 fun getListDestinationScreenMap(): Map<NavigationDestination, @Composable () -> Unit> =
     mapOf(
-        ListNavigationDestination to { ListScreen() }
+        ListNavigationDestination to { ListScreen() },
     )

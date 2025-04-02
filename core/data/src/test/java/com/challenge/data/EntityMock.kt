@@ -1,5 +1,3 @@
 package com.challenge.data
 
-object EntityMock {
-
-}
+object EntityMock

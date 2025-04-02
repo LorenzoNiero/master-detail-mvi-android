@@ -16,7 +16,6 @@ android {
             dimension = "environment"
         }
     }
-
 }
 
 dependencies {
@@ -30,7 +29,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)
-    testImplementation (libs.mockk)
+    testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }
