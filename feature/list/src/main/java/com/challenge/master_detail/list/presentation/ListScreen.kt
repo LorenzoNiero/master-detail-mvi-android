@@ -1,5 +1,7 @@
 package com.challenge.master_detail.list.presentation
 
+import MediaCell
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,13 +32,21 @@ fun ListScreen(viewModel: ListViewModel = hiltViewModel()) {
     val uiState = viewModel.uiState.collectAsState()
 
     ListContent(
-        uiState = uiState.value
+        uiState = uiState.value,
+        onClickItem = {
+            viewModel.navigateToDetail()
+        },
+        onDeleteItem = {
+            viewModel.deleteItem(it)
+        }
     )
 }
 
 @Composable
 fun ListContent(
-    uiState: ListUiState
+    uiState: ListUiState,
+    onClickItem: (MediaModel) -> Unit,
+    onDeleteItem: (MediaModel) -> Unit,
 ) {
     Column (
         modifier = Modifier
@@ -78,10 +88,17 @@ fun ListContent(
                     contentPadding = PaddingValues(
                         vertical = dimensionResource(R_UI.dimen.padding_list_vertical),
                         horizontal = dimensionResource(R_UI.dimen.padding_list_horizontal)
-                    )
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items))
                 ) {
-                    items(items = uiState.list){
-                        Text(text = it.title)
+                    items(items = uiState.list){ media ->
+                        MediaCell(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = media.title,
+                            date = media.date,
+                            onClick = { onClickItem(media) },
+                            onDelete = { onDeleteItem(media) }
+                        )
                     }
                 }
             }
@@ -89,25 +106,33 @@ fun ListContent(
     }
 }
 
+
+
 @Preview(showBackground = true)
 @Composable
 private fun ListScreenPreview() {
-    ListContent(ListUiState.Result(listOf(
-        MediaModel(
-            id = 1,
-            url = "https://.....jpg",
-            urlBig = "https://.....jpg",
-            type = MediaModelType.PDF,
-            date = null,
-            title = "Title",
+    ListContent(
+        ListUiState.Result(
+            listOf(
+                MediaModel(
+                    id = 1,
+                    url = "https://.....jpg",
+                    urlBig = "https://.....jpg",
+                    type = MediaModelType.PDF,
+                    date = null,
+                    title = "Title",
+                ),
+                MediaModel(
+                    id = 2,
+                    url = "https://.....jpg",
+                    urlBig = "https://.....jpg",
+                    type = MediaModelType.PDF,
+                    date = null,
+                    title = "Title",
+                )
+            )
         ),
-        MediaModel(
-            id = 2,
-            url = "https://.....jpg",
-            urlBig = "https://.....jpg",
-            type = MediaModelType.PDF,
-            date = null,
-            title = "Title",
-        )
-    )))
+        onClickItem = {},
+        onDeleteItem = {}
+    )
 }

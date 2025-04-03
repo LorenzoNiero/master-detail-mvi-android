@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.challenge.master_detail.domain.model.MediaModel
 import com.challenge.master_detail.domain.usecase.GetMediasUseCase
 import com.challenge.master_detail.navigator.Navigator
 import com.challenge.master_detail.navigator.destination.DetailNavigationDestination
@@ -52,6 +53,15 @@ class ListViewModel @Inject constructor(
             }.onFailure { throwable ->
                 _uiState.value = ListUiState.Error(throwable.message)
             }
+        }
+    }
+
+    fun deleteItem(mediaModel: MediaModel) {
+        val currentUiState = _uiState.value
+        if (currentUiState is ListUiState.Result) {
+            val newList = currentUiState.list.toMutableList()
+            newList.remove(mediaModel)
+            _uiState.value = ListUiState.Result(newList)
         }
     }
 
