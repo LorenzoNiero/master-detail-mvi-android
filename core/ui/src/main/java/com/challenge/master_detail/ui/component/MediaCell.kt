@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 @Composable
 fun MediaCell(title: String, date: LocalDateTime?, modifier: Modifier = Modifier,
               onClick: () -> Unit = {},
-              onDelete: () -> Unit = {}) {
+              onDelete: suspend () -> Unit = {}) {
     CardSurface(modifier = modifier) {
         SwipeBox(
             onDelete = onDelete,

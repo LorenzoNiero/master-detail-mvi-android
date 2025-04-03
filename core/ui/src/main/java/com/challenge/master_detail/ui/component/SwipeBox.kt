@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Composable
 fun SwipeBox(
     modifier: Modifier = Modifier,
-    onDelete: () -> Unit,
+    onDelete: suspend () -> Unit,
     content: @Composable () -> Unit
 ) {
     val swipeState = rememberSwipeToDismissBoxState()
@@ -81,12 +81,14 @@ fun SwipeBox(
         SwipeToDismissBoxValue.EndToStart -> {
             LaunchedEffect(swipeState) {
                 onDelete()
+                swipeState.reset()
             }
         }
 
         SwipeToDismissBoxValue.StartToEnd -> {
             LaunchedEffect(swipeState) {
                 onDelete()
+                swipeState.reset()
             }
         }
 

@@ -1,6 +1,10 @@
 package com.challenge.master_detail.list.presentation
 
 import MediaCell
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +18,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -25,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.challenge.master_detail.domain.model.MediaModel
 import com.challenge.master_detail.domain.model.MediaModelType
 import com.challenge.master_detail.list.R
+import kotlinx.coroutines.delay
 import com.challenge.master_detail.ui.R as R_UI
 
 @Composable
@@ -91,14 +100,27 @@ fun ListContent(
                     ),
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items))
                 ) {
-                    items(items = uiState.list){ media ->
-                        MediaCell(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = media.title,
-                            date = media.date,
-                            onClick = { onClickItem(media) },
-                            onDelete = { onDeleteItem(media) }
-                        )
+                    items(items = uiState.list, key = { it.id }){ media ->
+
+                        var visible by remember(media.id) { mutableStateOf(true) }
+
+                        AnimatedVisibility(
+                            visible = visible,
+                            enter = expandVertically(animationSpec = tween(300)),
+                            exit = shrinkVertically(animationSpec = tween(300))
+                        ) {
+                            MediaCell(
+                                modifier = Modifier.fillMaxWidth(),
+                                title = media.title,
+                                date = media.date,
+                                onClick = { onClickItem(media) },
+                                onDelete = {
+                                    visible = false
+                                    delay(300)
+                                    onDeleteItem(media)
+                                }
+                            )
+                        }
                     }
                 }
             }
