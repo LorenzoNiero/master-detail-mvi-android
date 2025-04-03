@@ -113,7 +113,7 @@ fun ListContent(
                                 MediaCell(
                                     modifier = Modifier.fillMaxWidth(),
                                     title = media.title,
-                                    date = media.date,
+                                    subTitle = media.formatDate(),
                                     onClick = {
                                         onIntent(ListIntent.Click(media))
                                     },

@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 
 
 @Composable
-fun MediaCell(title: String, date: LocalDateTime?, modifier: Modifier = Modifier,
+fun MediaCell(title: String, subTitle: String, modifier: Modifier = Modifier,
               onClick: () -> Unit = {},
               onDelete: suspend () -> Unit = {}) {
     CardSurface(modifier = modifier) {
@@ -32,7 +32,7 @@ fun MediaCell(title: String, date: LocalDateTime?, modifier: Modifier = Modifier
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
                 Text(
-                    text = date?.toString() ?: "",
+                    text = subTitle,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
@@ -44,6 +44,6 @@ fun MediaCell(title: String, date: LocalDateTime?, modifier: Modifier = Modifier
 @Composable
 fun MediaCellPreview(){
     MasterDetailTheme{
-        MediaCell(title = "Title", date = LocalDateTime.now())
+        MediaCell(title = "Title", subTitle = "Subtitle")
     }
 }

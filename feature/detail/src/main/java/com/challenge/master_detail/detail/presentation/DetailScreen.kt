@@ -57,7 +57,7 @@ fun DetailContent(
                     val media = uiState.media
                     Text(media.title,
                         style = MaterialTheme.typography.titleLarge)
-                    Text(media.date.toString())
+                    Text(media.formatDate())
                     Text(media.url)
                     if (media.url.isNotBlank() && media.type == MediaModelType.PDF) {
                         Button(onClick = {

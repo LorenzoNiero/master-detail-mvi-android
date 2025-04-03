@@ -3,6 +3,7 @@ package com.challenge.master_detail.common.model
 import com.challenge.master_detail.common.serializer.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Serializable
 data class MediaModel(
@@ -15,7 +16,8 @@ data class MediaModel(
     val title: String,
 ){
     fun formatDate(): String {
-        return date?.toString() ?: ""
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        return date?.format(formatter)?.toString() ?: ""
     }
 }
 
