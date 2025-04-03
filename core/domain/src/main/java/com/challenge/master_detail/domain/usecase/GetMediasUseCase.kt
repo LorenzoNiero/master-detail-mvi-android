@@ -1,6 +1,6 @@
 package com.challenge.master_detail.domain.usecase
 
-import com.challenge.master_detail.domain.model.MediaModel
+import com.challenge.master_detail.common.model.MediaModel
 import com.challenge.master_detail.domain.repository.MediaRepository
 import javax.inject.Inject
 
