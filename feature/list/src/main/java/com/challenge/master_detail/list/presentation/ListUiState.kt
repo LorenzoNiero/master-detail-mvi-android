@@ -12,3 +12,5 @@ sealed class ListUiState {
     ) : ListUiState()
     data object Empty : ListUiState()
 }
+
+

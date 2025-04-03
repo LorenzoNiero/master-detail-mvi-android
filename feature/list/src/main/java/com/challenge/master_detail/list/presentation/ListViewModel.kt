@@ -30,6 +30,14 @@ class ListViewModel @Inject constructor(
         refreshList()
     }
 
+    fun handleIntent(intent: ListIntent) {
+       when(intent){
+           is ListIntent.Click -> navigateToDetail()
+           is ListIntent.Delete -> deleteItem(intent.media)
+           ListIntent.Refresh -> refreshList()
+       }
+    }
+
     private fun refreshList() {
         viewModelScope.launch {
             fetchMedias()
@@ -56,7 +64,7 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun deleteItem(mediaModel: MediaModel) {
+    private fun deleteItem(mediaModel: MediaModel) {
         val currentUiState = _uiState.value
         if (currentUiState is ListUiState.Result) {
             val newList = currentUiState.list.toMutableList()
@@ -65,7 +73,7 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun navigateToDetail() {
+    private fun navigateToDetail() {
         navigator.navigate(DetailNavigationDestination)
     }
 

@@ -42,20 +42,14 @@ fun ListScreen(viewModel: ListViewModel = hiltViewModel()) {
 
     ListContent(
         uiState = uiState.value,
-        onClickItem = {
-            viewModel.navigateToDetail()
-        },
-        onDeleteItem = {
-            viewModel.deleteItem(it)
-        }
+        onIntent = { intent -> viewModel.handleIntent(intent) }
     )
 }
 
 @Composable
 fun ListContent(
     uiState: ListUiState,
-    onClickItem: (MediaModel) -> Unit,
-    onDeleteItem: (MediaModel) -> Unit,
+    onIntent: (ListIntent) -> Unit
 ) {
     Column (
         modifier = Modifier
@@ -113,11 +107,13 @@ fun ListContent(
                                 modifier = Modifier.fillMaxWidth(),
                                 title = media.title,
                                 date = media.date,
-                                onClick = { onClickItem(media) },
+                                onClick = {
+                                    onIntent(ListIntent.Click(media))
+                                          },
                                 onDelete = {
                                     visible = false
                                     delay(300)
-                                    onDeleteItem(media)
+                                    onIntent(ListIntent.Delete(media))
                                 }
                             )
                         }
@@ -154,7 +150,6 @@ private fun ListScreenPreview() {
                 )
             )
         ),
-        onClickItem = {},
-        onDeleteItem = {}
+        onIntent = {}
     )
 }
