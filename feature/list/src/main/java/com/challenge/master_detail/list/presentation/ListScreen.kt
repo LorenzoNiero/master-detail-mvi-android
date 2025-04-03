@@ -1,12 +1,12 @@
 package com.challenge.master_detail.list.presentation
 
+
 import MediaCell
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,12 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,20 +51,6 @@ fun ListScreen(viewModel: ListViewModel = hiltViewModel()) {
     )
 }
 
-@Composable
-fun ContentWithRetryButton(onClick: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
-    Column (
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items), Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        content()
-        Button(onClick = onClick) {
-            Text(text = stringResource(R.string.try_again))
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListContent(
@@ -80,83 +63,90 @@ fun ListContent(
         onRefresh = { onIntent(ListIntent.Refresh) },
         modifier = Modifier
     ) {
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
 
-        when (uiState) {
-            ListUiState.Empty -> {
-                ContentWithRetryButton(onClick = { onIntent(ListIntent.Refresh) }) {
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 16.dp),
-                        textAlign = TextAlign.Center,
-                        text = stringResource(R.string.empty_list_message)
-                    )
+            when (uiState) {
+                ListUiState.Empty -> {
+                    ContentWithRetryButton(onClick = { onIntent(ListIntent.Refresh) }) {
+                        Text(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 16.dp),
+                            textAlign = TextAlign.Center,
+                            text = stringResource(R.string.empty_list_message)
+                        )
+                    }
                 }
-            }
 
-            is ListUiState.Error -> {
-                ContentWithRetryButton(onClick = { onIntent(ListIntent.Refresh) }) {
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = dimensionResource(R_UI.dimen.padding_list_vertical)),
-                        textAlign = TextAlign.Center,
-                        text = stringResource(R.string.error_label, uiState.message ?: "")
-                    )
+                is ListUiState.Error -> {
+                    ContentWithRetryButton(onClick = { onIntent(ListIntent.Refresh) }) {
+                        Text(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = dimensionResource(R_UI.dimen.padding_list_vertical)),
+                            textAlign = TextAlign.Center,
+                            text = stringResource(R.string.error_label, uiState.message ?: "")
+                        )
+                    }
                 }
-            }
 
-            ListUiState.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
+                is ListUiState.Result -> {
 
-            is ListUiState.Result -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(
+                            vertical = dimensionResource(R_UI.dimen.padding_list_vertical),
+                            horizontal = dimensionResource(R_UI.dimen.padding_list_horizontal)
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items))
+                    ) {
+                        items(items = uiState.list, key = { it.id }) { media ->
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(
-                        vertical = dimensionResource(R_UI.dimen.padding_list_vertical),
-                        horizontal = dimensionResource(R_UI.dimen.padding_list_horizontal)
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items))
-                ) {
-                    items(items = uiState.list, key = { it.id }) { media ->
+                            var visible by remember(media.id) { mutableStateOf(true) }
 
-                        var visible by remember(media.id) { mutableStateOf(true) }
-
-                        AnimatedVisibility(
-                            visible = visible,
-                            enter = expandVertically(animationSpec = tween(300)),
-                            exit = shrinkVertically(animationSpec = tween(300))
-                        ) {
-                            MediaCell(
-                                modifier = Modifier.fillMaxWidth(),
-                                title = media.title,
-                                date = media.date,
-                                onClick = {
-                                    onIntent(ListIntent.Click(media))
-                                },
-                                onDelete = {
-                                    visible = false
-                                    delay(300)
-                                    onIntent(ListIntent.Delete(media))
-                                }
-                            )
+                            AnimatedVisibility(
+                                visible = visible,
+                                enter = expandVertically(animationSpec = tween(300)),
+                                exit = shrinkVertically(animationSpec = tween(300))
+                            ) {
+                                MediaCell(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    title = media.title,
+                                    date = media.date,
+                                    onClick = {
+                                        onIntent(ListIntent.Click(media))
+                                    },
+                                    onDelete = {
+                                        visible = false
+                                        delay(300)
+                                        onIntent(ListIntent.Delete(media))
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ContentWithRetryButton(onClick: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
+    Column (
+        modifier = Modifier
+            .padding(dimensionResource(R_UI.dimen.normal))
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items), Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        content()
+        Button(onClick = onClick) {
+            Text(text = stringResource(R.string.try_again))
+        }
     }
 }
 

@@ -24,7 +24,7 @@ class ListViewModel @Inject constructor(
     private val _loadingUiState = MutableStateFlow<Boolean>(false)
     val loadingUiState: StateFlow<Boolean> by lazy { _loadingUiState.asStateFlow() }
 
-    private val _uiState = MutableStateFlow<ListUiState>(ListUiState.Loading)
+    private val _uiState = MutableStateFlow<ListUiState>( ListUiState.Result(listOf()) )
     val uiState: StateFlow<ListUiState> by lazy { _uiState.asStateFlow() }
 
     init {
@@ -41,14 +41,12 @@ class ListViewModel @Inject constructor(
 
     private fun refreshList() {
         viewModelScope.launch {
-            _loadingUiState.emit(true)
             fetchMedias()
-            _loadingUiState.emit(false)
         }
     }
 
     private suspend fun fetchMedias() {
-        _uiState.value = ListUiState.Loading
+        _loadingUiState.emit(true)
 
         withContext(Dispatchers.IO){
 
@@ -64,6 +62,7 @@ class ListViewModel @Inject constructor(
             }.onFailure { throwable ->
                 _uiState.value = ListUiState.Error(throwable.message)
             }
+            _loadingUiState.emit(false)
         }
     }
 
