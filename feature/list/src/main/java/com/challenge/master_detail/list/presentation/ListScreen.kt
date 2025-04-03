@@ -4,7 +4,6 @@ package com.challenge.master_detail.list.presentation
 import MediaCell
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -103,13 +102,12 @@ fun ListContent(
                         ),
                         verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items))
                     ) {
-                        items(items = uiState.list, key = { it.id }) { media ->
+                        items(items = uiState.list, key = { media -> media.id }) { media ->
 
                             var visible by remember(media.id) { mutableStateOf(true) }
 
                             AnimatedVisibility(
                                 visible = visible,
-                                enter = expandVertically(animationSpec = tween(300)),
                                 exit = shrinkVertically(animationSpec = tween(300))
                             ) {
                                 MediaCell(
@@ -174,7 +172,7 @@ private fun ListScreenPreview() {
                     date = null,
                     title = "Title",
                 )
-            )
+            ),
         ),
         onIntent = {}
     )

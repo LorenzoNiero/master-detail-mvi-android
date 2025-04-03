@@ -71,7 +71,7 @@ class ListViewModel @Inject constructor(
         if (currentUiState is ListUiState.Result) {
             val newList = currentUiState.list.toMutableList()
             newList.remove(media)
-            _uiState.value = ListUiState.Result(newList)
+            _uiState.value = currentUiState.copy(newList)
         }
     }
 
