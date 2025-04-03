@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_app_found_to_open_pdf_message">No app found to open PDF</string>
+    <string name="open_url_big">Open PDF BIG</string>
+    <string name="open_url_pdf">Open PDF</string>
+</resources>

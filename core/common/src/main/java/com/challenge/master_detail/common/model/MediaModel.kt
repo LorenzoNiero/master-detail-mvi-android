@@ -13,5 +13,9 @@ data class MediaModel(
     @Serializable(with = LocalDateTimeSerializer::class)
     val date: LocalDateTime?,
     val title: String,
-)
+){
+    fun formatDate(): String {
+        return date?.toString() ?: ""
+    }
+}
 

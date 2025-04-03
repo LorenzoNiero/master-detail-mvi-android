@@ -87,7 +87,7 @@ fun ListContent(
                                 .align(Alignment.CenterHorizontally)
                                 .padding(top = dimensionResource(R_UI.dimen.padding_list_vertical)),
                             textAlign = TextAlign.Center,
-                            text = stringResource(R.string.error_label, uiState.message ?: "")
+                            text = stringResource(R_UI.string.error_label, uiState.message ?: "")
                         )
                     }
                 }
