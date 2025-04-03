@@ -1,6 +1,6 @@
 package com.challenge.master_detail.list.presentation
 
-import com.challenge.master_detail.domain.model.MediaModel
+import com.challenge.master_detail.common.model.MediaModel
 
 sealed class ListIntent {
     object Refresh : ListIntent()

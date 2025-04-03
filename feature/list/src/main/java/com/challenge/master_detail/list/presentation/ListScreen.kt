@@ -32,8 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.challenge.master_detail.domain.model.MediaModel
-import com.challenge.master_detail.domain.model.MediaModelType
+import com.challenge.master_detail.common.model.MediaModel
+import com.challenge.master_detail.common.model.MediaModelType
 import com.challenge.master_detail.list.R
 import kotlinx.coroutines.delay
 import com.challenge.master_detail.ui.R as R_UI

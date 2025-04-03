@@ -2,11 +2,12 @@ package com.challenge.master_detail.list.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.challenge.master_detail.domain.model.MediaModel
+import com.challenge.master_detail.common.model.MediaModel
 import com.challenge.master_detail.domain.usecase.GetMediasUseCase
 import com.challenge.master_detail.navigator.Navigator
 import com.challenge.master_detail.navigator.destination.DetailNavigationDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +28,10 @@ class ListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ListUiState>( ListUiState.Result(listOf()) )
     val uiState: StateFlow<ListUiState> by lazy { _uiState.asStateFlow() }
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _uiState.value = ListUiState.Error(throwable.message)
+    }
+
     init {
         refreshList()
     }
@@ -40,7 +45,7 @@ class ListViewModel @Inject constructor(
     }
 
     private fun refreshList() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             fetchMedias()
         }
     }
@@ -76,7 +81,7 @@ class ListViewModel @Inject constructor(
     }
 
     private fun navigateToDetail(media: MediaModel) {
-        navigator.navigate(DetailNavigationDestination)
+        navigator.navigate(DetailNavigationDestination.createDetailsRoute(media))
     }
 
 }

@@ -1,7 +1,6 @@
 package com.challenge.master_detail.list.presentation
 
-import com.challenge.master_detail.domain.model.MediaModel
-import java.time.LocalDateTime
+import com.challenge.master_detail.common.model.MediaModel
 
 sealed class ListUiState {
     data class Error(
