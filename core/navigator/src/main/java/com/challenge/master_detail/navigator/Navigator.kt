@@ -18,5 +18,10 @@ interface Navigator {
         builder: NavOptionsBuilder.() -> Unit = { launchSingleTop = true },
     ): Boolean
 
+    fun navigate(
+        navigationDestinationRoute: String,
+        builder: NavOptionsBuilder.() -> Unit = { launchSingleTop = true },
+    ): Boolean
+
     val destinations: Flow<NavigatorEvent>
 }
