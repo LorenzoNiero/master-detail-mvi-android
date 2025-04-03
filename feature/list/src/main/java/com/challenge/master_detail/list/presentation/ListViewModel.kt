@@ -1,7 +1,5 @@
 package com.challenge.master_detail.list.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.challenge.master_detail.domain.model.MediaModel
@@ -23,6 +21,9 @@ class ListViewModel @Inject constructor(
     private val getMediasUseCase : GetMediasUseCase
 ) : ViewModel(), Navigator by navigator {
 
+    private val _loadingUiState = MutableStateFlow<Boolean>(false)
+    val loadingUiState: StateFlow<Boolean> by lazy { _loadingUiState.asStateFlow() }
+
     private val _uiState = MutableStateFlow<ListUiState>(ListUiState.Loading)
     val uiState: StateFlow<ListUiState> by lazy { _uiState.asStateFlow() }
 
@@ -32,7 +33,7 @@ class ListViewModel @Inject constructor(
 
     fun handleIntent(intent: ListIntent) {
        when(intent){
-           is ListIntent.Click -> navigateToDetail()
+           is ListIntent.Click -> navigateToDetail(intent.media)
            is ListIntent.Delete -> deleteItem(intent.media)
            ListIntent.Refresh -> refreshList()
        }
@@ -40,7 +41,9 @@ class ListViewModel @Inject constructor(
 
     private fun refreshList() {
         viewModelScope.launch {
+            _loadingUiState.emit(true)
             fetchMedias()
+            _loadingUiState.emit(false)
         }
     }
 
@@ -64,16 +67,16 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    private fun deleteItem(mediaModel: MediaModel) {
+    private fun deleteItem(media: MediaModel) {
         val currentUiState = _uiState.value
         if (currentUiState is ListUiState.Result) {
             val newList = currentUiState.list.toMutableList()
-            newList.remove(mediaModel)
+            newList.remove(media)
             _uiState.value = ListUiState.Result(newList)
         }
     }
 
-    private fun navigateToDetail() {
+    private fun navigateToDetail(media: MediaModel) {
         navigator.navigate(DetailNavigationDestination)
     }
 

@@ -8,14 +8,20 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,41 +45,69 @@ import com.challenge.master_detail.ui.R as R_UI
 @Composable
 fun ListScreen(viewModel: ListViewModel = hiltViewModel()) {
     val uiState = viewModel.uiState.collectAsState()
+    val uiLoadingState = viewModel.loadingUiState.collectAsState()
 
     ListContent(
         uiState = uiState.value,
+        isLoading = uiLoadingState.value,
         onIntent = { intent -> viewModel.handleIntent(intent) }
     )
 }
 
 @Composable
+fun ContentWithRetryButton(onClick: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
+    Column (
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items), Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        content()
+        Button(onClick = onClick) {
+            Text(text = stringResource(R.string.try_again))
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun ListContent(
     uiState: ListUiState,
+    isLoading: Boolean = false,
     onIntent: (ListIntent) -> Unit
 ) {
+    PullToRefreshBox(
+        isRefreshing = isLoading,
+        onRefresh = { onIntent(ListIntent.Refresh) },
+        modifier = Modifier
+    ) {
     Column (
         modifier = Modifier
             .fillMaxSize()
     ) {
+
         when (uiState) {
             ListUiState.Empty -> {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp),
-                    textAlign = TextAlign.Center,
-                    text = stringResource(R.string.empty_list_message)
-                )
+                ContentWithRetryButton(onClick = { onIntent(ListIntent.Refresh) }) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 16.dp),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.empty_list_message)
+                    )
+                }
             }
 
             is ListUiState.Error -> {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = dimensionResource(R_UI.dimen.padding_list_vertical)),
-                    textAlign = TextAlign.Center,
-                    text = stringResource(R.string.error_label, uiState.message ?: "")
-                )
+                ContentWithRetryButton(onClick = { onIntent(ListIntent.Refresh) }) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = dimensionResource(R_UI.dimen.padding_list_vertical)),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.error_label, uiState.message ?: "")
+                    )
+                }
             }
 
             ListUiState.Loading -> {
@@ -86,6 +120,7 @@ fun ListContent(
             }
 
             is ListUiState.Result -> {
+
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(
@@ -94,7 +129,7 @@ fun ListContent(
                     ),
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(R_UI.dimen.spacing_between_items))
                 ) {
-                    items(items = uiState.list, key = { it.id }){ media ->
+                    items(items = uiState.list, key = { it.id }) { media ->
 
                         var visible by remember(media.id) { mutableStateOf(true) }
 
@@ -109,7 +144,7 @@ fun ListContent(
                                 date = media.date,
                                 onClick = {
                                     onIntent(ListIntent.Click(media))
-                                          },
+                                },
                                 onDelete = {
                                     visible = false
                                     delay(300)
@@ -121,6 +156,7 @@ fun ListContent(
                 }
             }
         }
+    }
     }
 }
 
@@ -150,6 +186,15 @@ private fun ListScreenPreview() {
                 )
             )
         ),
+        onIntent = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ListScreen_Error_Preview() {
+    ListContent(
+        ListUiState.Error("Text error"),
         onIntent = {}
     )
 }
