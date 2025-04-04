@@ -3,6 +3,7 @@ package com.challenge.master_detail.detail.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.challenge.master_detail.detail.openPdfInExternalApp
 import com.challenge.master_detail.navigator.destination.DetailNavigationDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -28,6 +29,15 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch(exceptionHandler) {
             _uiState.value = DetailUiState.Detail(
                 media = DetailNavigationDestination.decodeParam(savedStateHandle)
+            )
+        }
+    }
+
+    fun handleIntent(intent: DetailIntent) {
+        when(intent){
+            is DetailIntent.ClickAndOpenExternal -> openPdfInExternalApp(
+                context = intent.context,
+                url = intent.url
             )
         }
     }

@@ -1,9 +1,5 @@
 package com.challenge.master_detail.detail.presentation
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,20 +21,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.challenge.master_detail.detail.R
 import com.challenge.master_detail.ui.R as R_UI
-import androidx.core.net.toUri
 import com.challenge.master_detail.common.model.MediaModel
 import com.challenge.master_detail.common.model.MediaModelType
+import com.challenge.master_detail.detail.openPdfInExternalApp
+import com.challenge.master_detail.ui.theme.MasterDetailTheme
 import java.time.LocalDateTime
 
 @Composable
 fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
     val uiState = viewModel.uiState.collectAsState()
-    DetailContent(uiState.value)
+    DetailContent(
+        uiState.value,
+        onIntent = viewModel::handleIntent
+    )
 }
 
 @Composable
 fun DetailContent(
     uiState: DetailUiState,
+    onIntent: (DetailIntent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -61,7 +62,7 @@ fun DetailContent(
                     Text(media.url)
                     if (media.url.isNotBlank() && media.type == MediaModelType.PDF) {
                         Button(onClick = {
-                            openPdfInExternalApp(context, media.url)
+                            onIntent(DetailIntent.ClickAndOpenExternal(media.url, context))
                         }) {
                             Text(stringResource(R.string.open_url_pdf))
                         }
@@ -70,7 +71,7 @@ fun DetailContent(
                     Text(media.urlBig)
                     if (media.urlBig.isNotBlank() && media.type == MediaModelType.PDF) {
                         Button(onClick = {
-                            openPdfInExternalApp(context, media.urlBig)
+                            onIntent(DetailIntent.ClickAndOpenExternal(media.urlBig, context))
                         }) {
                             Text(stringResource(R.string.open_url_big))
                         }
@@ -99,27 +100,22 @@ fun DetailContent(
     }
 }
 
-fun openPdfInExternalApp(context: Context, url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    }
-
-    context.startActivity(intent)
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun DetailScreenPreview() {
-    DetailContent(
-        DetailUiState.Detail(
-            media = MediaModel(
-                id = 1,
-                url = "https://.....pdf",
-                urlBig = "https://.....pdf",
-                type = MediaModelType.PDF,
-                date = LocalDateTime.now(),
-                title = "Title example",
-            )
+    MasterDetailTheme {
+        DetailContent(
+            DetailUiState.Detail(
+                media = MediaModel(
+                    id = 1,
+                    url = "https://.....pdf",
+                    urlBig = "https://.....pdf",
+                    type = MediaModelType.PDF,
+                    date = LocalDateTime.now(),
+                    title = "Title example",
+                )
+            ),
+            onIntent = {}
         )
-    )
+    }
 }
