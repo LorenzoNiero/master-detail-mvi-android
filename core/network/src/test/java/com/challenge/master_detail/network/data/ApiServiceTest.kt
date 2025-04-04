@@ -33,8 +33,7 @@ class ApiServiceTest {
                 .writeTimeout(1, TimeUnit.SECONDS)
                 .build()
 
-        api =
-            Retrofit.Builder()
+        api = Retrofit.Builder()
                 .baseUrl(mockWebServer.url("/"))
                 .client(client)
                 .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -48,7 +47,7 @@ class ApiServiceTest {
     }
 
     @Test
-    fun `should fetch list success response`() =
+    fun `should fetch list and deserialize object with success response`() =
         runBlocking {
             // given
             val configurationResponseModel = ApiMock.listNetwork
