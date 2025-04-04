@@ -2,7 +2,9 @@
 
 ## Overview
 
-todo
+A sample Android native app that shows a list of medias and detail of a selected media.
+The app is based on Clean Architecture[Android developers architecture](https://developer.android.com/jetpack/guide?gclsrc=ds&gclsrc=ds) and MVI pattern.
+developed with [Jetpack Compose](https://developer.android.com/jetpack/compose).
 
 ## Getting Started
 To run the app locally, follow these steps:
