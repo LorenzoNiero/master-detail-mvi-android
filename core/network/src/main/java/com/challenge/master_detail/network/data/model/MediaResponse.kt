@@ -3,6 +3,11 @@ package com.challenge.master_detail.network.data.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Warning: with K2 this file have a warning but it work
+ * see: https://github.com/Kotlin/kotlinx.serialization/issues/2844
+ */
+
 @Serializable
 data class MediaResponse(
     val status: Boolean,
