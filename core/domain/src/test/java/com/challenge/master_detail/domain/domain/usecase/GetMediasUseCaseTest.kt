@@ -33,6 +33,20 @@ class GetMediasUseCaseTest {
 
         // Then
         coVerify { repository.fetchMediaList() }
+        assert(response.isSuccess)
+    }
+
+    @Test
+    fun `use case should call repository with error`() = runTest {
+        // Given
+        coEvery { repository.fetchMediaList() } throws Exception()
+
+        // When
+        val response = useCase()
+
+        // Then
+        coVerify { repository.fetchMediaList() }
+        assert(response.isFailure)
     }
 
 }
