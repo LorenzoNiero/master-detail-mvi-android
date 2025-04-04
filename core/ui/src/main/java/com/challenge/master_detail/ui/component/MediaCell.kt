@@ -10,7 +10,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.challenge.master_detail.ui.R
 import com.challenge.master_detail.ui.component.CardSurface
 import com.challenge.master_detail.ui.theme.MasterDetailTheme
-import java.time.LocalDateTime
 
 
 @Composable

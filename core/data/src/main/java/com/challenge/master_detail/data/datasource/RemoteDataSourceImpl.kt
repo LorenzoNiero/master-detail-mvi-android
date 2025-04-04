@@ -2,7 +2,6 @@ package com.challenge.master_detail.data.datasource
 
 import com.challenge.master_detail.network.api.ApiService
 import com.challenge.master_detail.network.data.model.MediaContent
-import com.challenge.master_detail.network.data.model.MediaResponse
 import javax.inject.Inject
 
 internal class RemoteDataSourceImpl

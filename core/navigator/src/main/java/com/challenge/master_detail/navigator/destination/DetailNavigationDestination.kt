@@ -6,10 +6,8 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.challenge.master_detail.common.model.MediaModel
-import com.challenge.master_detail.common.model.MediaModelType
 import com.challenge.master_detail.navigator.R
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 
 object DetailNavigationDestination : NavigationDestination {
     override fun route(): String = DETAILS_NAV_ROUTE
@@ -32,7 +30,7 @@ object DetailNavigationDestination : NavigationDestination {
 
     @Throws(IllegalStateException::class)
     fun decodeParam(savedStateHandle: SavedStateHandle) : MediaModel {
-        val jsonString = savedStateHandle.get<String>(DetailNavigationDestination.JSON_PARAM)
+        val jsonString = savedStateHandle.get<String>(JSON_PARAM)
             ?: throw IllegalStateException("Parameter step number must not be null!")
         return Json.decodeFromString<MediaModel>(Uri.decode(jsonString))
     }

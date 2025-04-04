@@ -4,7 +4,6 @@ import com.challenge.master_detail.data.datasource.RemoteDataSourceImpl
 import com.challenge.master_detail.network.api.ApiService
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest

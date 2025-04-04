@@ -19,13 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.challenge.master_detail.detail.R
-import com.challenge.master_detail.ui.R as R_UI
 import com.challenge.master_detail.common.model.MediaModel
 import com.challenge.master_detail.common.model.MediaModelType
-import com.challenge.master_detail.detail.openPdfInExternalApp
+import com.challenge.master_detail.detail.R
 import com.challenge.master_detail.ui.theme.MasterDetailTheme
 import java.time.LocalDateTime
+import com.challenge.master_detail.ui.R as R_UI
 
 @Composable
 fun DetailScreen(viewModel: DetailViewModel = hiltViewModel()) {
